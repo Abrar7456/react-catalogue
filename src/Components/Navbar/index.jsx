@@ -295,7 +295,7 @@ const Navbar = () => {
                 <ul className="flex flex-col gap-4 px-4">
                   <li>
                     <NavLink
-                      to="/add-items"
+                      to="/manage-items"
                       onClick={toggleMenu}
                       className={({ isActive }) =>
                         `block text-lg font-semibold ${
@@ -303,7 +303,7 @@ const Navbar = () => {
                         }`
                       }
                     >
-                      Add Items
+                      Manage
                     </NavLink>
                   </li>
                   <li>
