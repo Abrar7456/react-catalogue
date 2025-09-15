@@ -25,55 +25,71 @@ const CartSummary = () => {
   }
 
   return (
-    <Layout>
-      <div className='flex items-center justify-center relative w-80 mb-6'>
-        <button 
-          className='absolute left-0'
-          onClick={() => navigate(-1)}>
-          <ChevronLeftIcon className='h-6 w-6 text-black cursor-pointer'/>
-        </button>
-        <h1 className='font-medium text-xl'>Cart Summary</h1>
-      </div>
-      
-      <div className='flex flex-col w-80'>
-        {context.cartProducts.map(product => (
-          <OrderCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            imageUrl={product.imageUrl}
-            price={product.price}
-          />
-        ))}
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-green-800 text-white px-4 py-8">
+      <Layout>
+        {/* Header */}
+        <div className="flex items-center justify-center relative w-full max-w-lg mx-auto mb-8">
+          <button 
+            className="absolute left-0 flex items-center justify-center bg-green-900 hover:bg-green-800 p-2 rounded-full shadow-md transition"
+            onClick={() => navigate(-1)}>
+            <ChevronLeftIcon className="h-6 w-6 text-white"/>
+          </button>
+          <h1 className="font-extrabold text-2xl tracking-wide">Cart Summary</h1>
+        </div>
         
-        <div className='px-6 mb-6'>
-          <p className='flex justify-between items-center mb-2'>
-            <span className='font-light'>Total:</span>
-            <span className='font-medium text-2xl'>${totalPrice(context.cartProducts)}</span>
-          </p>
-          {context.isUserAuthenticated ? (
-            <button
-              className='bg-black py-3 text-white w-full rounded-lg'
-              onClick={handleCheckout}>
-              Checkout
-            </button>
+        {/* Cart Items */}
+        <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
+          {context.cartProducts.length > 0 ? (
+            context.cartProducts.map(product => (
+              <OrderCard
+                key={product.id}
+                id={product.id}
+                title={product.title}
+                imageUrl={product.image_urls?.[0]}
+                price={product.price}
+              />
+            ))
           ) : (
-            <div className='space-y-2'>
-              <button
-                className='bg-black py-3 text-white w-full rounded-lg'
-                onClick={() => navigate('/sign-in')}>
-                Sign In
-              </button>
-              <button
-                className='bg-white py-3 text-black border border-black w-full rounded-lg'
-                onClick={() => navigate('/sign-up')}>
-                Sign Up
-              </button>
+            <div className="text-center py-12 bg-green-900/40 rounded-xl shadow-md border border-green-700">
+              <p className="text-lg font-light">Your cart is empty 🛒</p>
             </div>
           )}
         </div>
-      </div>
-    </Layout>
+
+        {/* Footer */}
+        {context.cartProducts.length > 0 && (
+          <div className="bg-green-900/40 backdrop-blur-sm border border-green-700 rounded-xl px-6 py-6 mt-8 w-full max-w-lg mx-auto shadow-lg">
+            <p className="flex justify-between items-center mb-4 text-lg">
+              <span className="font-light">Total:</span>
+              <span className="font-bold text-2xl text-green-300">
+                ${totalPrice(context.cartProducts)}
+              </span>
+            </p>
+
+            {context.isUserAuthenticated ? (
+              <button
+                className="bg-green-700 hover:bg-green-600 py-3 text-white w-full rounded-lg font-semibold shadow-lg transition"
+                onClick={handleCheckout}>
+                Checkout
+              </button>
+            ) : (
+              <div className="space-y-3">
+                <button
+                  className="bg-green-700 hover:bg-green-600 py-3 text-white w-full rounded-lg font-semibold shadow-lg transition"
+                  onClick={() => navigate('/sign-in')}>
+                  Sign In
+                </button>
+                <button
+                  className="bg-transparent border-2 border-green-400 text-green-300 hover:bg-green-800 py-3 w-full rounded-lg font-semibold shadow-lg transition"
+                  onClick={() => navigate('/sign-up')}>
+                  Sign Up
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Layout>
+    </div>
   )
 }
 

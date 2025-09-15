@@ -2,7 +2,6 @@
 import { useContext, useState } from "react";
 import { supabase } from "../../lib/supabaseClient"; // adjust path
 import { ShoppingCartContext } from "../../Context";
-import Layout from "../../Components/Layout";
 
 const DeleteItem = () => {
   const { deleteItem, isAdmin } = useContext(ShoppingCartContext);
@@ -13,11 +12,11 @@ const DeleteItem = () => {
 
   if (!isAdmin) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64 text-red-500 font-semibold">
+      <div className="flex items-center justify-center px-4">
+        <div className="text-red-600 font-semibold bg-red-50 border border-red-200 px-6 py-4 rounded-lg shadow-sm">
           ❌ You are not authorized to access this page
         </div>
-      </Layout>
+      </div>
     );
   }
 
@@ -59,35 +58,39 @@ const DeleteItem = () => {
   };
 
   return (
-    <Layout>
-      <div className="flex flex-col items-center justify-center min-h-screen p-6">
-        <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6">
-          <h1 className="text-xl font-bold mb-4 text-center">
-            Delete Item by Article No
-          </h1>
+    <div className="flex flex-col items-center justify-center bg-gray-50 px-4 py-6">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+        <h1 className="text-xl font-bold mb-4 text-center text-red-700">
+          🗑️ Delete Item by Article No
+        </h1>
 
-          <input
-            type="text"
-            value={articleNo}
-            onChange={(e) => setArticleNo(e.target.value)}
-            placeholder="Enter article number (e.g., SMZ-1)"
-            className="w-full px-4 py-2 border rounded-md mb-4"
-          />
+        <input
+          type="text"
+          value={articleNo}
+          onChange={(e) => setArticleNo(e.target.value)}
+          placeholder="Enter article number (e.g., SMZ-1)"
+          className="w-full px-4 py-2 border rounded-md mb-4 focus:ring-2 focus:ring-red-500 text-black"
+        />
 
-          <button
-            onClick={handleDelete}
-            disabled={loading}
-            className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 disabled:opacity-50"
+        <button
+          onClick={handleDelete}
+          disabled={loading}
+          className="w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 font-semibold transition disabled:opacity-50"
+        >
+          {loading ? "Deleting..." : "Delete Item"}
+        </button>
+
+        {message && (
+          <p
+            className={`mt-4 text-center text-sm font-medium ${
+              message.startsWith("✅") ? "text-green-600" : "text-red-600"
+            }`}
           >
-            {loading ? "Deleting..." : "Delete Item"}
-          </button>
-
-          {message && (
-            <p className="mt-4 text-center text-sm font-medium">{message}</p>
-          )}
-        </div>
+            {message}
+          </p>
+        )}
       </div>
-    </Layout>
+    </div>
   );
 };
 

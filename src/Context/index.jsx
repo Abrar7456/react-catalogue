@@ -72,6 +72,22 @@ export const ShoppingCartProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const getSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (data?.session?.user) {
+        setAccount(data.session.user);
+        setIsUserAuthenticated(true);
+
+        if (data.session.user.email === "bmsaeed@gmail.com") {
+          setIsAdmin(true);
+        }
+      }
+
+      setIsLoading(false); // ✅ important
+    };
+    getSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -79,7 +95,6 @@ export const ShoppingCartProvider = ({ children }) => {
         setAccount(session.user);
         setIsUserAuthenticated(true);
 
-        // TODO: Replace with role/flag from Supabase DB
         if (session.user.email === "bmsaeed@gmail.com") {
           setIsAdmin(true);
         }
@@ -88,6 +103,7 @@ export const ShoppingCartProvider = ({ children }) => {
         setIsUserAuthenticated(false);
         setIsAdmin(false);
       }
+      setIsLoading(false); // ✅ also mark as done after auth events
     });
 
     return () => subscription.unsubscribe();
